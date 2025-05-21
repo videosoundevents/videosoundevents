@@ -16,20 +16,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 console.log('Using Gmail App Password:', !!process.env.GMAIL_APP_PASSWORD);
   const mailOptions = {
-    from: 'chupahin.02c@gmail.com',
-    to: 'chupahin.02c@gmail.com',
-    subject: `New Order from ${name}`,
-    html: `
-      <h2>New Product Order</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Time:</strong> ${time}</p>
-      <p><strong>Product:</strong> ${productName}</p>
-      <p><strong>Price:</strong> ${price}</p>
-      <img src="${image}" alt="Product Image" width="200" />
-    `,
-  };
-
+  from: 'chupahin.02c@gmail.com',
+  to: 'chupahin.02c@gmail.com',
+  subject: `New Order from ${name}`,
+  text: `New order from ${name} for ${productName}. Phone: ${phone}`,
+  html: `
+    <h2>New Product Order</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Phone:</strong> ${phone}</p>
+    <p><strong>Time:</strong> ${time}</p>
+    <p><strong>Product:</strong> ${productName}</p>
+    <p><strong>Price:</strong> ${price}</p>
+    <img src="${image}" alt="Product Image" width="200" />
+  `,
+};
   try {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: 'Email sent successfully' });
