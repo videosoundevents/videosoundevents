@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
@@ -29,16 +28,15 @@ interface CallbackFormProps {
   };
 }
 
-
 const CallbackForm: React.FC<CallbackFormProps> = ({ 
   productId, 
   onSuccess,
-  includeDescription = false 
+  includeDescription = false,
+  productDetails 
 }) => {
   const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Define form schema based on requirements
   const formSchema = z.object({
     name: z.string().min(2, { message: "Name is required" }),
     phone: z.string().min(5, { message: "Valid phone number required" }),
@@ -59,37 +57,37 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
   });
   
   const onSubmit = async (data: FormValues) => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    const time = new Date().toLocaleString();
+    try {
+      const time = new Date().toLocaleString();
 
-    // Call the backend API (Vercel function)
-    await axios.post('/api/send-email', {
-      name: data.name,
-      phone: data.phone,
-      productName: productDetails?.name || 'Unknown',
-      image: productDetails?.image || '',
-      price: productDetails?.price || 'N/A',
-      time,
-    });
+      // Call the backend API (e.g., Vercel serverless function)
+      await axios.post('/api/send-email', {
+        name: data.name,
+        phone: data.phone,
+        productName: productDetails?.name || 'Unknown',
+        image: productDetails?.image || '',
+        price: productDetails?.price || 'N/A',
+        time,
+        description: data.description || '',
+        productId: productId || '',
+      });
 
-    toast.success(t('callback_success'));
-    form.reset();
+      toast.success(t('callback_success'));
+      form.reset();
 
-    if (onSuccess) {
-      onSuccess();
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error('Error submitting form:', error);
-    toast.error('An error occurred. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
-
-  // Define placeholders based on language
   const placeholders = {
     name: {
       ua: "Ім'я",
