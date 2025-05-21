@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       pass: process.env.GMAIL_APP_PASSWORD, // use App Password
     },
   });
-
+console.log('Using Gmail App Password:', !!process.env.GMAIL_APP_PASSWORD);
   const mailOptions = {
     from: 'chupahin.02c@gmail.com',
     to: 'chupahin.02c@gmail.com',
