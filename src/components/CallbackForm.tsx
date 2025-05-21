@@ -21,7 +21,13 @@ interface CallbackFormProps {
   productId?: string;
   onSuccess?: () => void;
   includeDescription?: boolean;
+  productDetails?: {
+    name: string;
+    image: string;
+    price: string;
+  };
 }
+
 
 const CallbackForm: React.FC<CallbackFormProps> = ({ 
   productId, 
@@ -52,28 +58,35 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
   });
   
   const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    
-    try {
-      // In a real application, this would send data to a backend API
-      console.log('Form submitted with:', { ...data, productId });
-      
-      // Simulate API request delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success(t('callback_success'));
-      form.reset();
-      
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('An error occurred. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+  setIsSubmitting(true);
+
+  try {
+    const time = new Date().toLocaleString();
+
+    // Call the backend API (Vercel function)
+    await axios.post('/api/send-email', {
+      name: data.name,
+      phone: data.phone,
+      productName: productDetails?.name || 'Unknown',
+      image: productDetails?.image || '',
+      price: productDetails?.price || 'N/A',
+      time,
+    });
+
+    toast.success(t('callback_success'));
+    form.reset();
+
+    if (onSuccess) {
+      onSuccess();
     }
-  };
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    toast.error('An error occurred. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   // Define placeholders based on language
   const placeholders = {
