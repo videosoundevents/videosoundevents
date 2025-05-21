@@ -89,7 +89,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 {product.name[language]} - {product.price} {t('price_per_day')}
               </DialogDescription>
             </DialogHeader>
-            <CallbackForm productId={product.id} onSuccess={() => setIsDialogOpen(false)} />
+            <CallbackForm
+              productId={product.id}
+              onSuccess={() => setIsDialogOpen(false)}
+              productDetails={{
+                name: product.name[language],
+                image: getProcessedImageUrl(),
+                price: product.price.toString()
+              }}
+            />
           </DialogContent>
         </Dialog>
       </CardFooter>
