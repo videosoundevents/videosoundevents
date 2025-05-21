@@ -80,10 +80,11 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
       if (onSuccess) {
         onSuccess();
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('An error occurred. Please try again.');
-    } finally {
+    } } catch (error: any) {
+      console.error('Error submitting form:', error?.response?.data || error.message);
+      toast.error('Email error: ' + (error?.response?.data?.message || 'Unknown'));
+    }
+ finally {
       setIsSubmitting(false);
     }
   };
