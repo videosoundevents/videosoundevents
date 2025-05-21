@@ -56,13 +56,12 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     }
   });
   
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: FormValues): Promise<void> => {
     setIsSubmitting(true);
 
     try {
       const time = new Date().toLocaleString();
 
-      // Call the backend API (e.g., Vercel serverless function)
       await axios.post('/api/send-email', {
         name: data.name,
         phone: data.phone,
@@ -80,6 +79,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
       if (onSuccess) {
         onSuccess();
       }
+
     } catch (error: any) {
       console.error('Error submitting form:', error?.response?.data || error.message);
       toast.error('Email error: ' + (error?.response?.data?.message || 'Unknown'));
