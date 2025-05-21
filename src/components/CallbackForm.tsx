@@ -56,13 +56,18 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     }
   });
   
-  const onSubmit = async (data: FormValues): Promise<void> => {
-    setIsSubmitting(true);
+  const onSubmit = async (data: FormValues) => {
+  setIsSubmitting(true);
 
-    try {
-      const time = new Date().toLocaleString();
+  try {
+    const time = new Date().toLocaleString();
 
-      await axios.post('/api/send-email', {
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         name: data.name,
         phone: data.phone,
         productName: productDetails?.name || 'Unknown',
@@ -71,22 +76,29 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
         time,
         description: data.description || '',
         productId: productId || '',
-      });
+      }),
+    });
 
-      toast.success(t('callback_success'));
-      form.reset();
+    const result = await response.json();
 
-      if (onSuccess) {
-        onSuccess();
-      }
-
-    } catch (error: any) {
-      console.error('Error submitting form:', error?.response?.data || error.message);
-      toast.error('Email error: ' + (error?.response?.data?.message || 'Unknown'));
-    } finally {
-      setIsSubmitting(false);
+    if (!response.ok) {
+      throw new Error(result.message || 'Unknown error');
     }
-  };
+
+    toast.success(t('callback_success'));
+    form.reset();
+    if (onSuccess) {
+      onSuccess();
+    }
+
+  } catch (error: any) {
+    console.error('Error submitting form:', error.message);
+    toast.error('Email error: ' + error.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const placeholders = {
     name: {
