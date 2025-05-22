@@ -58,25 +58,28 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
+    const row = [
+      data.name,
+      data.phone,
+      productDetails?.name || 'Unknown',
+      productDetails?.image || '',
+      productDetails?.price || 'N/A',
+      new Date().toLocaleString(),
+      data.description || '',
+      productId || '',
+    ];
+
     try {
-      const response = await fetch('https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP?tabId=List', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: [[
-            data.name,
-            data.phone,
-            productDetails?.name || 'Unknown',
-            productDetails?.image || '',
-            productDetails?.price || 'N/A',
-            new Date().toLocaleString(),
-            data.description || '',
-            productId || '',
-          ]]
-        }),
-      });
+      const response = await fetch(
+        'https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP?tabId=List',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: [row] }),
+        }
+      );
 
       const result = await response.json();
 
@@ -97,7 +100,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
 
   const placeholders = {
     name: {
-      ua: 'Ім\'я',
+      ua: "Ім'я",
       ru: 'Имя',
       en: 'Name',
     },
@@ -147,7 +150,11 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {language === 'ua' ? 'Опис' : language === 'ru' ? 'Описание' : 'Description'}
+                  {language === 'ua'
+                    ? 'Опис'
+                    : language === 'ru'
+                    ? 'Описание'
+                    : 'Description'}
                 </FormLabel>
                 <FormControl>
                   <Textarea
