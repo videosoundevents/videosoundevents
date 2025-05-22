@@ -1,53 +1,33 @@
-import nodemailer from 'nodemailer';
-import type { NextApiRequest, NextApiResponse } from 'next';
+// File: /api/send-email.ts
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('Incoming request:', req.method); // ✅ Basic log
-
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
   try {
-    const { name, phone, productName, time, description } = req.body;
+    const {
+      name,
+      phone,
+      productName,
+      image,
+      price,
+      time,
+      description,
+      productId,
+    } = req.body;
 
-    if (!name || !phone || !productName || !time) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'chupahin.02c@gmail.com',
-        pass: 'auax ldqj nyts yeqw',
-      },
+    // Log or handle the data — for now, just log it.
+    console.log('Callback Form Data:', {
+      name, phone, productName, image, price, time, description, productId
     });
 
-    // Verify transporter configuration
-    await transporter.verify();
-    console.log('Transporter configured successfully');
+    // Simulate email sending or external API call here
 
-    const mailOptions = {
-      from: `"Callback" <chupahin.02c@gmail.com>`, // Updated to match user
-      to: 'chupahin.02n@gmail.com',
-      subject: `New request: ${productName}`,
-      text: `
-        Name: ${name}
-        Phone: ${phone}
-        Product: ${productName}
-        Time: ${time}
-        Description: ${description || 'No description'}
-      `,
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully');
-
-    return res.status(200).json({ message: 'Email sent successfully' });
-  } catch (err: any) {
-    console.error('Send error:', err.message);
-    return res.status(500).json({ message: 'Failed to send email', error: err.message });
+    return res.status(200).json({ message: 'Form submitted successfully.' });
+  } catch (error: any) {
+    console.error('API error:', error.message);
+    return res.status(500).json({ message: 'Internal server error.' });
   }
 }
