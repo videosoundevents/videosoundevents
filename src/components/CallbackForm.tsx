@@ -61,22 +61,25 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     try {
       const time = new Date().toLocaleString();
 
-      await fetch('https://script.google.com/macros/s/AKfycbxvPRKdRH6tb5a-nRVY4D_tBaThYkxFfESA0Vxm4p-VJ5eR2lOeFWhP4YN5VcOVTlT6/exec', {
+     await fetch('https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    name: data.name,
-    phone: data.phone,
-    productName: productDetails?.name || 'Unknown',
-    image: productDetails?.image || '',
-    price: productDetails?.price || 'N/A',
-    time: new Date().toLocaleString(),
-    description: data.description || '',
-    productId: productId || '',
+    data: [[
+      data.name,
+      data.phone,
+      productDetails?.name || 'Unknown',
+      productDetails?.image || '',
+      productDetails?.price || 'N/A',
+      new Date().toLocaleString(),
+      data.description || '',
+      productId || '',
+    ]]
   }),
 });
+
 
 
       const result = await response.json();
