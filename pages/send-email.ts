@@ -1,5 +1,3 @@
-// File: /pages/api/send-email.ts
-
 import nodemailer from 'nodemailer';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -18,18 +16,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT || '465'),
+      host: 'smtp.gmail.com',
+      port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: 'chupahin.02c@gmail.com',
+        pass: 'auax ldqj nyts yeqw',
       },
     });
 
+    // Verify transporter configuration
+    await transporter.verify();
+    console.log('Transporter configured successfully');
+
     const mailOptions = {
-      from: `"Callback" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_RECEIVER,
+      from: `"Callback" <chupahin.02c@gmail.com>`, // Updated to match user
+      to: 'chupahin.02n@gmail.com',
       subject: `New request: ${productName}`,
       text: `
         Name: ${name}
@@ -41,6 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
 
     return res.status(200).json({ message: 'Email sent successfully' });
   } catch (err: any) {
