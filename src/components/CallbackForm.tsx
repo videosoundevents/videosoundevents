@@ -27,113 +27,90 @@ interface CallbackFormProps {
   };
 }
 
-const CallbackForm: React.FC<CallbackFormProps> = ({ 
-  productId, 
+const CallbackForm: React.FC<CallbackFormProps> = ({
+  productId,
   onSuccess,
   includeDescription = false,
-  productDetails 
+  productDetails,
 }) => {
   const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const formSchema = z.object({
-    name: z.string().min(2, { message: "Name is required" }),
-    phone: z.string().min(5, { message: "Valid phone number required" }),
-    description: includeDescription 
+    name: z.string().min(2, { message: 'Name is required' }),
+    phone: z.string().min(5, { message: 'Valid phone number required' }),
+    description: includeDescription
       ? z.string().optional()
-      : z.string().optional().default("")
+      : z.string().optional().default(''),
   });
 
   type FormValues = z.infer<typeof formSchema>;
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       phone: '',
-      description: ''
-    }
+      description: '',
+    },
   });
-  
+
   const onSubmit = async (data: FormValues) => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    const time = new Date().toLocaleString();
+    try {
+      const time = new Date().toLocaleString();
 
-    const response = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: data.name,
-        phone: data.phone,
-        productName: productDetails?.name || 'Unknown',
-        image: productDetails?.image || '',
-        price: productDetails?.price || 'N/A',
-        time,
-        description: data.description || '',
-        productId: productId || '',
-      }),
-    });
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          phone: data.phone,
+          productName: productDetails?.name || 'Unknown',
+          image: productDetails?.image || '',
+          price: productDetails?.price || 'N/A',
+          time,
+          description: data.description || '',
+          productId: productId || '',
+        }),
+      });
 
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(text || 'Unknown error');
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Unknown error');
+      }
+
+      toast.success(t('callback_success'));
+      form.reset();
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error: any) {
+      console.error('Error submitting form:', error.message);
+      toast.error('Email error: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const result = await response.json(); // Now safe
-    toast.success(t('callback_success'));
-    form.reset();
-    if (onSuccess) {
-      onSuccess();
-    }
-
-  } catch (error: any) {
-    console.error('Error submitting form:', error.message);
-    toast.error('Email error: ' + error.message);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || 'Unknown error');
-    }
-
-    toast.success(t('callback_success'));
-    form.reset();
-    if (onSuccess) {
-      onSuccess();
-    }
-
-  } catch (error: any) {
-    console.error('Error submitting form:', error.message);
-    toast.error('Email error: ' + error.message);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   const placeholders = {
     name: {
       ua: "Ім'я",
-      ru: "Имя",
-      en: "Name"
+      ru: 'Имя',
+      en: 'Name',
     },
-    phone: "+380950001111",
+    phone: '+380950001111',
     description: {
-      ua: "Напишіть, що вас цікавить або деталі заходу",
-      ru: "Напишите, что вас интересует или детали мероприятия",
-      en: "Write what are you looking for or event details"
-    }
+      ua: 'Напишіть, що вас цікавить або деталі заходу',
+      ru: 'Напишите, что вас интересует или детали мероприятия',
+      en: 'Write what are you looking for or event details',
+    },
   };
-  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -144,16 +121,16 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             <FormItem>
               <FormLabel>{t('your_name')}</FormLabel>
               <FormControl>
-                <Input 
-                  {...field} 
-                  placeholder={placeholders.name[language]} 
+                <Input
+                  {...field}
+                  placeholder={placeholders.name[language]}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="phone"
@@ -161,16 +138,13 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             <FormItem>
               <FormLabel>{t('your_phone')}</FormLabel>
               <FormControl>
-                <Input 
-                  {...field} 
-                  placeholder={placeholders.phone} 
-                />
+                <Input {...field} placeholder={placeholders.phone} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        
+
         {includeDescription && (
           <FormField
             control={form.control}
@@ -178,11 +152,15 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {language === 'ua' ? 'Опис' : language === 'ru' ? 'Описание' : 'Description'}
+                  {language === 'ua'
+                    ? 'Опис'
+                    : language === 'ru'
+                    ? 'Описание'
+                    : 'Description'}
                 </FormLabel>
                 <FormControl>
-                  <Textarea 
-                    {...field} 
+                  <Textarea
+                    {...field}
                     placeholder={placeholders.description[language]}
                     className="min-h-[120px] resize-y"
                   />
@@ -192,7 +170,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             )}
           />
         )}
-        
+
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? (
             <span className="flex items-center gap-2">
