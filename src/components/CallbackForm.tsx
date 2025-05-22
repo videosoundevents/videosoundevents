@@ -65,7 +65,6 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
       image: productDetails?.image || '',
       price: productDetails?.price || 'N/A',
       time: new Date().toLocaleString(),
-      description: data.description || '',
       productId: productId || '',
     }];
 
