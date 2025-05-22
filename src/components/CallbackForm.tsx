@@ -78,6 +78,27 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
       }),
     });
 
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || 'Unknown error');
+    }
+
+    const result = await response.json(); // Now safe
+    toast.success(t('callback_success'));
+    form.reset();
+    if (onSuccess) {
+      onSuccess();
+    }
+
+  } catch (error: any) {
+    console.error('Error submitting form:', error.message);
+    toast.error('Email error: ' + error.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
     const result = await response.json();
 
     if (!response.ok) {
