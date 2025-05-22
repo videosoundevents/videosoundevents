@@ -61,22 +61,23 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     try {
       const time = new Date().toLocaleString();
 
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: data.name,
-          phone: data.phone,
-          productName: productDetails?.name || 'Unknown',
-          image: productDetails?.image || '',
-          price: productDetails?.price || 'N/A',
-          time,
-          description: data.description || '',
-          productId: productId || '',
-        }),
-      });
+      await fetch('https://script.google.com/macros/s/AKfycbxvPRKdRH6tb5a-nRVY4D_tBaThYkxFfESA0Vxm4p-VJ5eR2lOeFWhP4YN5VcOVTlT6/exec', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    name: data.name,
+    phone: data.phone,
+    productName: productDetails?.name || 'Unknown',
+    image: productDetails?.image || '',
+    price: productDetails?.price || 'N/A',
+    time: new Date().toLocaleString(),
+    description: data.description || '',
+    productId: productId || '',
+  }),
+});
+
 
       const result = await response.json();
 
