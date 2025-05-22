@@ -1,7 +1,7 @@
 // File: /api/send-email.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+const handler = async (req: VercelRequest, res: VercelResponse) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -18,16 +18,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       productId,
     } = req.body;
 
-    // Log or handle the data — for now, just log it.
-    console.log('Callback Form Data:', {
-      name, phone, productName, image, price, time, description, productId
+    // Simulated processing: you can replace this with real email logic
+    console.log('📩 New Callback Submission:', {
+      name, phone, productName, image, price, time, description, productId,
     });
 
-    // Simulate email sending or external API call here
-
+    // Respond success
     return res.status(200).json({ message: 'Form submitted successfully.' });
   } catch (error: any) {
-    console.error('API error:', error.message);
+    console.error('❌ send-email API Error:', error.message);
     return res.status(500).json({ message: 'Internal server error.' });
   }
-}
+};
+
+export default handler;
