@@ -55,35 +55,49 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
+const onSubmit = async (data: FormValues) => {
+  setIsSubmitting(true);
 
-    try {
-      const time = new Date().toLocaleString();
+  try {
+    const time = new Date().toLocaleString();
 
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: data.name,
-          phone: data.phone,
-          productName: productDetails?.name || 'Unknown',
-          image: productDetails?.image || '',
-          price: productDetails?.price || 'N/A',
-          time,
-          description: data.description || '',
-          productId: productId || '',
-        }),
-      });
-    } catch (error: any) {
-      console.error('Error submitting form:', error.message);
-      toast.error('Email error: ' + error.message);
-    } finally {
-      setIsSubmitting(false);
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: data.name,
+        phone: data.phone,
+        productName: productDetails?.name || 'Unknown',
+        image: productDetails?.image || '',
+        price: productDetails?.price || 'N/A',
+        time,
+        description: data.description || '',
+        productId: productId || '',
+      }),
+    });
+
+    const result = await response.json(); // <-- это теперь внутри async функции
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Unknown error');
     }
-  };
+
+    toast.success(t('callback_success'));
+    form.reset();
+    if (onSuccess) {
+      onSuccess();
+    }
+
+  } catch (error: any) {
+    console.error('Error submitting form:', error.message);
+    toast.error('Email error: ' + error.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const placeholders = {
     name: {
