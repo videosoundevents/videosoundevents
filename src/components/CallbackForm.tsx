@@ -61,7 +61,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     try {
       const time = new Date().toLocaleString();
 
-      const response = await fetch('/src/pages/send-email', {
+      const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
