@@ -58,28 +58,25 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
-    const row = [
-      data.name,
-      data.phone,
-      productDetails?.name || 'Unknown',
-      productDetails?.image || '',
-      productDetails?.price || 'N/A',
-      new Date().toLocaleString(),
-      data.description || '',
-      productId || '',
-    ];
+    const payload = [{
+      name: data.name,
+      phone: data.phone,
+      productName: productDetails?.name || 'Unknown',
+      image: productDetails?.image || '',
+      price: productDetails?.price || 'N/A',
+      time: new Date().toLocaleString(),
+      description: data.description || '',
+      productId: productId || '',
+    }];
 
     try {
-      const response = await fetch(
-        'https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP?tabId=List',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: [row] }),
-        }
-      );
+      const response = await fetch('https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP/addRows?tabId=List', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
       const result = await response.json();
 
