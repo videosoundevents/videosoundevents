@@ -59,28 +59,24 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const time = new Date().toLocaleString();
-
-     await fetch('https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    data: [[
-      data.name,
-      data.phone,
-      productDetails?.name || 'Unknown',
-      productDetails?.image || '',
-      productDetails?.price || 'N/A',
-      new Date().toLocaleString(),
-      data.description || '',
-      productId || '',
-    ]]
-  }),
-});
-
-
+      const response = await fetch('https://v1.nocodeapi.com/nnlmix/google_sheets/tNKUwJlWUsOqPwxP?tabId=List', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: [[
+            data.name,
+            data.phone,
+            productDetails?.name || 'Unknown',
+            productDetails?.image || '',
+            productDetails?.price || 'N/A',
+            new Date().toLocaleString(),
+            data.description || '',
+            productId || '',
+          ]]
+        }),
+      });
 
       const result = await response.json();
 
@@ -90,13 +86,10 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
 
       toast.success(t('callback_success'));
       form.reset();
-      if (onSuccess) {
-        onSuccess();
-      }
-
+      onSuccess?.();
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
-      toast.error('Email error: ' + error.message);
+      toast.error('Submission error: ' + error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -126,10 +119,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             <FormItem>
               <FormLabel>{t('your_name')}</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder={placeholders.name[language]}
-                />
+                <Input {...field} placeholder={placeholders.name[language]} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -157,11 +147,7 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {language === 'ua'
-                    ? 'Опис'
-                    : language === 'ru'
-                    ? 'Описание'
-                    : 'Description'}
+                  {language === 'ua' ? 'Опис' : language === 'ru' ? 'Описание' : 'Description'}
                 </FormLabel>
                 <FormControl>
                   <Textarea
