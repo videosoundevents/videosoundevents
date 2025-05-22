@@ -77,18 +77,6 @@ const CallbackForm: React.FC<CallbackFormProps> = ({
           productId: productId || '',
         }),
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Unknown error');
-      }
-
-      toast.success(t('callback_success'));
-      form.reset();
-      if (onSuccess) {
-        onSuccess();
-      }
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
       toast.error('Email error: ' + error.message);
