@@ -1,16 +1,15 @@
-
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useLanguage, Language } from '../contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useLanguage, Language } from "../contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Menu, X, Globe, Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+} from "@/components/ui/dropdown-menu";
+import { Menu, X, Globe, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -22,10 +21,10 @@ const Navbar: React.FC = () => {
   };
 
   const navItems = [
-    { key: 'home', path: '/' },
-    { key: 'categories', path: '/categories' },
-    { key: 'contact_us', path: '/contact' },
-    { key: 'faq', path: '/faq' },
+    { key: "home", path: "/" },
+    { key: "categories", path: "/categories" },
+    { key: "contact_us", path: "/contact" },
+    { key: "faq", path: "/faq" },
   ];
 
   const changeLanguage = (lang: Language) => {
@@ -33,7 +32,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    navigate('/categories');
+    navigate("/categories");
   };
 
   return (
@@ -42,7 +41,9 @@ const Navbar: React.FC = () => {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <NavLink to="/" className="flex items-center space-x-2">
-              <span className="font-bold text-2xl text-primary">VideoSoundEvent</span>
+              <span className="font-bold text-2xl text-primary">
+                VideoSoundEvent
+              </span>
             </NavLink>
           </div>
 
@@ -54,7 +55,7 @@ const Navbar: React.FC = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `text-sm font-medium transition-colors hover:text-primary ${
-                    isActive ? 'text-primary' : 'text-foreground'
+                    isActive ? "text-primary" : "text-foreground"
                   }`
                 }
               >
@@ -69,7 +70,7 @@ const Navbar: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={handleSearchClick}
-              title={t('search_products')}
+              title={t("search_products")}
               className="text-gray-700 hover:bg-secondary hover:text-primary transition-colors"
             >
               <Search className="h-5 w-5" />
@@ -78,28 +79,32 @@ const Navbar: React.FC = () => {
             {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="font-medium text-gray-700 hover:bg-secondary hover:text-primary transition-colors">
-                  {language === 'ua' ? 'UA' : language === 'ru' ? 'RU' : 'EN'}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="font-medium text-gray-700 hover:bg-secondary hover:text-primary transition-colors"
+                >
+                  {language === "ua" ? "UA" : language === "ru" ? "RU" : "EN"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem 
-                  onClick={() => changeLanguage('ua')}
-                  className={language === 'ua' ? 'bg-secondary' : ''}
+                <DropdownMenuItem
+                  onClick={() => changeLanguage("ua")}
+                  className={language === "ua" ? "bg-secondary" : ""}
                 >
-                  {t('ua')}
+                  {t("ua")}
                 </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => changeLanguage('ru')}
-                  className={language === 'ru' ? 'bg-secondary' : ''}
+                <DropdownMenuItem
+                  onClick={() => changeLanguage("ru")}
+                  className={language === "ru" ? "bg-secondary" : ""}
                 >
-                  {t('ru')}
+                  {t("ru")}
                 </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => changeLanguage('en')}
-                  className={language === 'en' ? 'bg-secondary' : ''}
+                <DropdownMenuItem
+                  onClick={() => changeLanguage("en")}
+                  className={language === "en" ? "bg-secondary" : ""}
                 >
-                  {t('en')}
+                  {t("en")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -131,7 +136,9 @@ const Navbar: React.FC = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-md ${
-                    isActive ? 'bg-secondary text-primary' : 'text-foreground hover:bg-secondary'
+                    isActive
+                      ? "bg-secondary text-primary"
+                      : "text-foreground hover:bg-secondary"
                   }`
                 }
                 onClick={() => setMobileMenuOpen(false)}

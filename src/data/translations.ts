@@ -1,238 +1,247 @@
-import { Translations } from '../contexts/LanguageContext';
+import { Translations } from "../contexts/LanguageContext";
 
 export const translations: Translations = {
   // Navigation
-  "home": {
+  home: {
     ua: "Головна",
     ru: "Главная",
-    en: "Home"
+    en: "Home",
   },
-  "categories": {
+  categories: {
     ua: "Категорії",
     ru: "Категории",
-    en: "Categories"
+    en: "Categories",
   },
-  "leasing_process": {
+  leasing_process: {
     ua: "Процес оренди",
     ru: "Процесс аренды",
-    en: "Leasing Process"
+    en: "Leasing Process",
   },
-  "contact_us": {
+  contact_us: {
     ua: "Зворотній зв'язок",
     ru: "Обратная связь",
-    en: "Contact Us"
+    en: "Contact Us",
   },
-  "faq": {
+  faq: {
     ua: "FAQ",
     ru: "FAQ",
-    en: "FAQ"
+    en: "FAQ",
   },
 
   // Hero section
-  "hero_title": {
+  hero_title: {
     ua: "Професійне обладнання в оренду",
     ru: "Профессиональное оборудование в аренду",
-    en: "Professional Equipment for Rent"
+    en: "Professional Equipment for Rent",
   },
-  "hero_subtitle": {
+  hero_subtitle: {
     ua: "Якісне сценічне обладнання для вашого заходу за доступними цінами",
     ru: "Качественное сценическое оборудование для вашего мероприятия по доступным ценам",
-    en: "Quality stage equipment for your event at affordable prices"
+    en: "Quality stage equipment for your event at affordable prices",
   },
-  "view_catalog": {
+  view_catalog: {
     ua: "Переглянути каталог",
     ru: "Просмотреть каталог",
-    en: "View Catalog"
+    en: "View Catalog",
   },
-
+  events_gallery: {
+    ua: "Галерея Івентів",
+    ru: "Галерея Ивентов",
+    en: "Event Gallery",
+  },
   // About Us section
-  "about_us": {
+  about_us: {
     ua: "Про нас",
     ru: "О нас",
-    en: "About Us"
+    en: "About Us",
   },
-  "about_us_description": {
+  about_us_description: {
     ua: "VideoSoundEvent – професійна компанія з оренди аудіо та відео обладнання. Ми надаємо високоякісне обладнання для проведення будь-яких заходів, від невеликих вечірок до масштабних концертів та фестивалів.",
     ru: "VideoSoundEvent – профессиональная компания по аренде аудио и видео оборудования. Мы предоставляем высококачественное оборудование для проведения любых мероприятий, от небольших вечеринок до масштабных концертов и фестивалей.",
-    en: "VideoSoundEvent is a professional audio and video equipment rental company. We provide high-quality equipment for any event, from small parties to large-scale concerts and festivals."
+    en: "VideoSoundEvent is a professional audio and video equipment rental company. We provide high-quality equipment for any event, from small parties to large-scale concerts and festivals.",
   },
-  "years_experience": {
+  years_experience: {
     ua: "років досвіду",
     ru: "лет опыта",
-    en: "years of experience"
+    en: "years of experience",
   },
-  "successful_events": {
+  successful_events: {
     ua: "успішних заходів",
     ru: "успешных мероприятий",
-    en: "successful events"
+    en: "successful events",
   },
-  "regular_clients": {
+  regular_clients: {
     ua: "постійних клієнтів",
     ru: "постоянных клиентов",
-    en: "regular clients"
+    en: "regular clients",
   },
-  "partner_companies": {
+  partner_companies: {
     ua: "компаній-партнерів",
     ru: "компаний-партнеров",
-    en: "partner companies"
+    en: "partner companies",
   },
 
   // Categories
-  "video_equipment": {
+  video_equipment: {
     ua: "Відео обладнання",
     ru: "Видео оборудование",
-    en: "Video Equipment"
+    en: "Video Equipment",
   },
-  "audio_equipment": {
+  audio_equipment: {
     ua: "Звукове обладнання",
     ru: "Звуковое оборудование",
-    en: "Audio Equipment"
+    en: "Audio Equipment",
   },
-  "lighting_equipment": {
+  lighting_equipment: {
     ua: "Світлове обладнання",
     ru: "Световое оборудование",
-    en: "Lighting Equipment"
+    en: "Lighting Equipment",
   },
-  "stage_equipment": {
+  stage_equipment: {
     ua: "Сценічне обладнання",
     ru: "Сценическое оборудование",
-    en: "Stage Equipment"
+    en: "Stage Equipment",
   },
-  "special_effects": {
+  special_effects: {
     ua: "Спецефекти",
     ru: "Спецэффекты",
-    en: "Special Effects"
+    en: "Special Effects",
   },
-  "miscellaneous": {
+  miscellaneous: {
     ua: "Різне",
     ru: "Разное",
-    en: "Miscellaneous"
+    en: "Miscellaneous",
   },
-  
+  loading: {
+    ua: "Завантаження",
+    ru: "Загрузка",
+    en: "Loading",
+  },
+
   // Old categories that we'll keep for backward compatibility with existing products
-  "multimedia_tools": {
+  multimedia_tools: {
     ua: "Мультимедіа інструменти",
     ru: "Мультимедиа инструменты",
-    en: "Multimedia Tools"
+    en: "Multimedia Tools",
   },
-  "laser_equipment": {
+  laser_equipment: {
     ua: "Лазерне обладнання",
     ru: "Лазерное оборудование",
-    en: "Laser Equipment"
+    en: "Laser Equipment",
   },
-  "studio_equipment": {
+  studio_equipment: {
     ua: "Студійне обладнання",
     ru: "Студийное оборудование",
-    en: "Studio Equipment"
+    en: "Studio Equipment",
   },
-  "multimedia": {
+  multimedia: {
     ua: "Мультимедіа",
     ru: "Мультимедиа",
-    en: "Multimedia"
+    en: "Multimedia",
   },
-  "dj_equipment": {
+  dj_equipment: {
     ua: "DJ Обладнання",
     ru: "DJ Оборудование",
-    en: "DJ Equipment"
+    en: "DJ Equipment",
   },
-  "hifi_equipment": {
+  hifi_equipment: {
     ua: "Hi-Fi & Hi-End обладнання",
     ru: "Hi-Fi & Hi-End оборудование",
-    en: "Hi-Fi & Hi-End Equipment"
+    en: "Hi-Fi & Hi-End Equipment",
   },
-  "cables": {
+  cables: {
     ua: "Розетки і кабелі",
     ru: "Развлечь и кабеля",
-    en: "Connectors & Cables"
+    en: "Connectors & Cables",
   },
-  "hygiene": {
+  hygiene: {
     ua: "Засоби гігієни",
     ru: "Средства гигиены",
-    en: "Hygiene Products"
+    en: "Hygiene Products",
   },
-  
+
   // Product Cards
-  "price_per_day": {
+  price_per_day: {
     ua: "грн/день",
     ru: "грн/день",
-    en: "UAH/day"
+    en: "UAH/day",
   },
-  "request_callback": {
+  request_callback: {
     ua: "Замовити дзвінок",
     ru: "Заказать звонок",
-    en: "Request Callback"
+    en: "Request Callback",
   },
 
   // Callback Form
-  "callback_title": {
+  callback_title: {
     ua: "Замовити дзвінок",
     ru: "Заказать звонок",
-    en: "Request Callback"
+    en: "Request Callback",
   },
-  "your_name": {
+  your_name: {
     ua: "Ваше ім'я",
     ru: "Ваше имя",
-    en: "Your Name"
+    en: "Your Name",
   },
-  "your_phone": {
+  your_phone: {
     ua: "Ваш телефон",
     ru: "Ваш телефон",
-    en: "Your Phone"
+    en: "Your Phone",
   },
-  "send_request": {
+  send_request: {
     ua: "Надіслати запит",
     ru: "Отправить запрос",
-    en: "Send Request"
+    en: "Send Request",
   },
-  "callback_success": {
+  callback_success: {
     ua: "Запит надіслано. Ми зв'яжемося з вами найближчим часом.",
     ru: "Запрос отправлен. Мы свяжемся с вами в ближайшее время.",
-    en: "Request sent. We will contact you shortly."
+    en: "Request sent. We will contact you shortly.",
   },
 
   // Home Page Sections
-  "featured_products": {
+  featured_products: {
     ua: "Популярні товари",
     ru: "Популярные товары",
-    en: "Featured Products"
+    en: "Featured Products",
   },
-  "view_all_products": {
+  view_all_products: {
     ua: "Переглянути всі товари",
     ru: "Просмотреть все товары",
-    en: "View All Products"
+    en: "View All Products",
   },
 
   // Languages
-  "language": {
+  language: {
     ua: "Мова",
     ru: "Язык",
-    en: "Language"
+    en: "Language",
   },
-  "ua": {
+  ua: {
     ua: "Українська",
     ru: "Украинский",
-    en: "Ukrainian"
+    en: "Ukrainian",
   },
-  "ru": {
+  ru: {
     ua: "Російська",
     ru: "Русский",
-    en: "Russian"
+    en: "Russian",
   },
-  "en": {
+  en: {
     ua: "Англійська",
     ru: "Английский",
-    en: "English"
+    en: "English",
   },
 
   // Search functionality
-  "search_products": {
+  search_products: {
     ua: "Пошук продуктів",
     ru: "Поиск продуктов",
-    en: "Search products"
+    en: "Search products",
   },
-  "search_results": {
+  search_results: {
     ua: "Результати пошуку",
     ru: "Результаты поиска",
-    en: "Search results"
-  }
+    en: "Search results",
+  },
 };

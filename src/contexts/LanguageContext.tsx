@@ -1,8 +1,7 @@
-
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 // Define available languages
-export type Language = 'ua' | 'ru' | 'en';
+export type Language = "ua" | "ru" | "en";
 
 // Define translation structure
 export interface Translations {
@@ -19,20 +18,23 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
 
 interface LanguageProviderProps {
   children: ReactNode;
   initialTranslations: Translations;
 }
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ 
-  children, 
-  initialTranslations 
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
+  children,
+  initialTranslations,
 }) => {
   // Change default language from 'ua' to 'ua' (no actual change needed, but confirming it's already set to Ukrainian)
-  const [language, setLanguage] = useState<Language>('ua');
-  const [translations, setTranslations] = useState<Translations>(initialTranslations);
+  const [language, setLanguage] = useState<Language>("ua");
+  const [translations, setTranslations] =
+    useState<Translations>(initialTranslations);
 
   const t = (key: string): string => {
     if (translations[key] && translations[key][language]) {
@@ -51,7 +53,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
 };

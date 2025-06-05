@@ -1,22 +1,29 @@
-import React from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Phone, Calendar, Truck, CreditCard, FileCheck } from 'lucide-react';
-import { Helmet } from 'react-helmet';
+import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  CheckCircle,
+  Phone,
+  Calendar,
+  Truck,
+  CreditCard,
+  FileCheck,
+} from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const LeasingProcess: React.FC = () => {
   const { language } = useLanguage();
 
   const pageTitles = {
-    ua: 'Процес оренди',
-    ru: 'Процесс аренды',
-    en: 'Leasing Process',
+    ua: "Процес оренди",
+    ru: "Процесс аренды",
+    en: "Leasing Process",
   };
 
   const pageDescriptions = {
-    ua: 'Дізнайтеся покроковий процес оренди обладнання — від контакту до повернення.',
-    ru: 'Узнайте поэтапный процесс аренды оборудования — от контакта до возврата.',
-    en: 'Learn the step-by-step leasing process — from contact to equipment return.',
+    ua: "Дізнайтеся покроковий процес оренди обладнання — від контакту до повернення.",
+    ru: "Узнайте поэтапный процесс аренды оборудования — от контакта до возврата.",
+    en: "Learn the step-by-step leasing process — from contact to equipment return.",
   };
 
   const steps = [
@@ -100,35 +107,76 @@ const LeasingProcess: React.FC = () => {
     },
   ];
 
+  // Fallback language if context fails
+  const currentLanguage = language || "en";
+
   return (
     <>
       <Helmet>
-        <title>{pageTitles[language]}</title>
-        <meta name="description" content={pageDescriptions[language]} />
-        <meta name="keywords" content="concert equipment, event rentals Ukraine, live sound systems, stage equipment Ukraine, audio gear rental, обладнання для концертів, оренда обладнання Україна, живі звукові системи, сценічне обладнання Україна, оренда аудіо обладнання" />
-        <link rel="canonical" href="https://videosoundevents.com/leasing-process" />
-        <meta property="og:title" content={pageTitles[language]} />
-        <meta property="og:description" content={pageDescriptions[language]} />
+        <title>{pageTitles[currentLanguage]}</title>
+        <meta name="description" content={pageDescriptions[currentLanguage]} />
+        <meta
+          name="keywords"
+          content={
+            currentLanguage === "ua"
+              ? "оренда обладнання, процес оренди, концертне обладнання, сценічне обладнання, Україна"
+              : currentLanguage === "ru"
+                ? "аренда оборудования, процесс аренды, концертное оборудование, сценическое оборудование, Украина"
+                : "equipment rental, leasing process, concert equipment, stage equipment, Ukraine"
+          }
+        />
+        <link
+          rel="canonical"
+          href="https://videosoundevents.com/leasing-process"
+        />
+        <meta property="og:title" content={pageTitles[currentLanguage]} />
+        <meta
+          property="og:description"
+          content={pageDescriptions[currentLanguage]}
+        />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://videosoundevents.com/leasing-process" />
-        <meta property="og:image" content="https://videosoundevents.com/og-image.jpg" />
+        <meta
+          property="og:url"
+          content="https://videosoundevents.com/leasing-process"
+        />
+        <meta
+          property="og:image"
+          content="https://videosoundevents.com/og-image.jpg"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitles[currentLanguage]} />
+        <meta
+          name="twitter:description"
+          content={pageDescriptions[currentLanguage]}
+        />
+        <meta
+          name="twitter:image"
+          content="https://videosoundevents.com/og-image.jpg"
+        />
       </Helmet>
 
-      <main className="container py-12" aria-label={pageTitles[language]}>
-        <h1 tabIndex={-1} className="text-3xl font-bold mb-8 text-center">
-          {pageTitles[language]}
+      <main
+        className="container py-12"
+        aria-label={pageTitles[currentLanguage]}
+      >
+        <h1 className="text-3xl font-bold mb-8 text-center">
+          {pageTitles[currentLanguage]}
         </h1>
 
         <div className="max-w-4xl mx-auto" role="list">
           <div className="space-y-8">
             {steps.map((step, index) => (
-              <Card key={index} className="border-l-4 border-l-primary" role="listitem">
+              <Card
+                key={index}
+                className="border-l-4 border-l-primary"
+                role="listitem"
+              >
                 <CardHeader className="flex flex-row items-center gap-4">
                   {step.icon}
-                  <CardTitle>{step.title[language]}</CardTitle>
+                  <CardTitle>{step.title[currentLanguage]}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>{step.description[language]}</p>
+                  <p>{step.description[currentLanguage]}</p>
                 </CardContent>
               </Card>
             ))}

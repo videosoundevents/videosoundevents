@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async"; // Changed from react-helmet
+import { Helmet } from "react-helmet-async";
 
 const NotFound = () => {
   const location = useLocation();
@@ -8,7 +8,7 @@ const NotFound = () => {
   useEffect(() => {
     console.error(
       "404 Error: User attempted to access non-existent route:",
-      location.pathname
+      location.pathname,
     );
   }, [location.pathname]);
 
@@ -19,6 +19,22 @@ const NotFound = () => {
         <meta name="robots" content="noindex, nofollow" />
         <meta
           name="description"
+          content="The page you are looking for does not exist. Return to the homepage."
+        />
+        <meta property="og:title" content="404 Not Found - VideoSoundEvent" />
+        <meta
+          property="og:description"
+          content="The page you are looking for does not exist. Return to the homepage."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content={`https://videosoundevents.com${location.pathname}`}
+        />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="404 Not Found - VideoSoundEvent" />
+        <meta
+          name="twitter:description"
           content="The page you are looking for does not exist. Return to the homepage."
         />
       </Helmet>
