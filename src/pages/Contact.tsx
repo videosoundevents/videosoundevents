@@ -18,9 +18,9 @@ const Contact: React.FC = () => {
 
   const contactInfo = {
     address: {
-      ua: "вул. Йорданська 7, Київ, Україна",
-      ru: "ул. Иорданская 7, Киев, Украина",
-      en: "7 Yordanska St., Kyiv, Ukraine",
+      ua: "Київ, Україна",
+      ru: "Киев, Украина",
+      en: "Kyiv, Ukraine",
     },
     phone: "+380 93 576 5000",
     email: "videosoundevent@gmail.com",
