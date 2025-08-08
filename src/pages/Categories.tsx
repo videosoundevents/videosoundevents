@@ -1,48 +1,106 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getProducts, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import CallbackForm from "@/components/CallbackForm";
+import { useProductData } from "@/hooks/useProductData";
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
+
+interface Product {
+  id: string;
+  name: Record<string, string>;
+  description: Record<string, string>;
+  category: string;
+  price: number;
+  imageUrl: string;
+  videoUrl?: string;
+}
 
 const Categories: React.FC = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { categoryId } = useParams<{ categoryId?: string }>();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const { products, categories, loading } = useProductData();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<
     Array<{ id: string; name: string; category: string }>
   >([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState<string>("");
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-        const uniqueCategories = [...new Set(data.map((p) => p.category))];
-        setCategories(uniqueCategories);
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
 
-        if (categoryId && uniqueCategories.includes(categoryId)) {
-          setSelectedCategory(categoryId);
-        } else {
-          setSelectedCategory(uniqueCategories[0] || "");
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to fetch products:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [categoryId]);
+    if (categoryId && categories.includes(categoryId)) {
+      setSelectedCategory(categoryId);
+    } else {
+      setSelectedCategory(categories[0] || "");
+    }
+  }, [categoryId, categories]);
+
+  const handleAddToCart = (product: Product) => {
+    const existingItem = cart.find((item) => item.id === product.id);
+    let updatedCart: CartItem[];
+    if (existingItem) {
+      updatedCart = cart.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+    } else {
+      updatedCart = [
+        ...cart,
+        {
+          id: product.id,
+          name: product.name[language],
+          price: product.price,
+          image: product.imageUrl,
+          quantity: 1,
+        },
+      ];
+    }
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const handleRemoveFromCart = (productId: string) => {
+    const itemToRemove = cart.find((item) => item.id === productId);
+    let updatedCart: CartItem[];
+    if (itemToRemove && itemToRemove.quantity > 1) {
+      updatedCart = cart.map((item) =>
+        item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+      );
+    } else {
+      updatedCart = cart.filter((item) => item.id !== productId);
+    }
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -56,7 +114,7 @@ const Categories: React.FC = () => {
     if (query.length >= 2) {
       const results = products
         .filter((product) =>
-          product.name[language].toLowerCase().includes(query),
+          product.name[language].toLowerCase().includes(query)
         )
         .map((product) => ({
           id: product.id,
@@ -84,11 +142,36 @@ const Categories: React.FC = () => {
     }, 100);
   };
 
+  const handlePlayVideo = (videoUrl: string) => {
+    setCurrentVideoUrl(videoUrl);
+    setIsVideoOpen(true);
+  };
+
+  const handleCloseVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    setIsVideoOpen(false);
+    setCurrentVideoUrl("");
+  };
+
+  const handleToggleFullscreen = () => {
+    if (videoRef.current) {
+      if (!document.fullscreenElement) {
+        videoRef.current.requestFullscreen().catch((err) => {
+          console.error("Failed to enter fullscreen:", err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  };
+
   const filteredProducts = products.filter(
-    (product) => product.category === selectedCategory,
+    (product) => product.category === selectedCategory
   );
 
-  // Dynamic SEO based on selected category
   const pageTitle = selectedCategory
     ? `${t(selectedCategory)} | VideoSoundEvent`
     : "Categories | VideoSoundEvent";
@@ -113,10 +196,10 @@ const Categories: React.FC = () => {
         />
       </Helmet>
 
-      <div className="container py-8">
+      <div className="container py-8 relative">
         <h1 className="text-3xl font-bold mb-4">{t("categories")}</h1>
 
-        {isLoading ? (
+        {loading ? (
           <div className="text-center py-12">
             <p className="text-lg text-muted-foreground">{t("loading")}</p>
           </div>
@@ -193,7 +276,11 @@ const Categories: React.FC = () => {
                                 key={product.id}
                                 className="transition-all duration-300"
                               >
-                                <ProductCard product={product} />
+                                <ProductCard
+                                  product={product}
+                                  onAddToCart={handleAddToCart}
+                                  onPlayVideo={handlePlayVideo}
+                                />
                               </div>
                             ))
                           ) : (
@@ -211,6 +298,105 @@ const Categories: React.FC = () => {
               </Tabs>
             </div>
           </>
+        )}
+
+        <div className="fixed bottom-6 right-6 z-30">
+          <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="relative rounded-full p-3 bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
+                aria-label="Open cart"
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {cart.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                  </span>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>{t("cart")}</DialogTitle>
+              </DialogHeader>
+              <div className="max-h-[60vh] overflow-y-auto">
+                {cart.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-4">
+                    {t("cart_empty")}
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {cart.map((item) => (
+                      <div
+                        key={`${item.id}-${item.quantity}`}
+                        className="flex items-center gap-4 border-b pb-4"
+                      >
+                        <img
+                          src={
+                            item.image.includes("?")
+                              ? item.image
+                              : `${item.image}?w=100&h=75&fit=crop&crop=entropy&auto=format&q=80`
+                          }
+                          alt={item.name}
+                          className="w-16 h-12 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-medium">
+                            {item.quantity > 1 ? `${item.quantity} x ${item.name}` : item.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {item.price * item.quantity} {t("price_per_day")}
+                          </p>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleRemoveFromCart(item.id)}
+                        >
+                          {t("remove")}
+                        </Button>
+                      </div>
+                    ))}
+                    <CallbackForm
+                      cart={cart}
+                      onSuccess={() => {
+                        setCart([]);
+                        localStorage.removeItem("cart");
+                        setIsCartOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {isVideoOpen && currentVideoUrl && (
+          <div className="fixed inset-8 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+            <div className="relative w-[80%] max-w-4xl">
+              <video
+                ref={videoRef}
+                src={currentVideoUrl}
+                controls
+                className="w-full h-auto rounded-lg"
+              >
+                Your browser does not support the video tag.
+              </video>
+              <Button
+                className="absolute top-2 right-2 bg-red-500 text-white"
+                onClick={handleCloseVideo}
+              >
+                Close
+              </Button>
+              <Button
+                className="absolute top-2 left-2 bg-blue-500 text-white"
+                onClick={handleToggleFullscreen}
+              >
+                {document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen"}
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </>

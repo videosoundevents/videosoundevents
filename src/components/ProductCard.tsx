@@ -10,24 +10,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Product } from "@/data/products";
 import { useLanguage } from "@/contexts/LanguageContext";
-import CallbackForm from "./CallbackForm";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Helmet } from "react-helmet-async";
+import { ShoppingCart, Play } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
+  onAddToCart?: (product: Product) => void;
+  onPlayVideo?: (videoUrl: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onPlayVideo }) => {
   const { language, t } = useLanguage();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
@@ -66,10 +59,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             description: productDescription,
             offers: {
               "@type": "Offer",
-              priceCurrency: "UAH", // Adjust currency as needed
+              priceCurrency: "UAH",
               price: product.price.toString(),
-              availability: "https://schema.org/InStock", // Adjust based on actual availability
-              url: `https://videosoundevents.com/categories/${product.category}`, // Link to category page
+              availability: "https://schema.org/InStock",
+              url: `https://videosoundevents.com/categories/${product.category}`,
             },
           })}
         </script>
@@ -93,29 +86,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <CardContent>
           <p className="line-clamp-3 h-18 text-sm">{productDescription}</p>
         </CardContent>
-        <CardFooter className="pt-2">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full">{t("request_callback")}</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t("callback_title")}</DialogTitle>
-                <DialogDescription>
-                  {productName} - {product.price} {t("price_per_day")}
-                </DialogDescription>
-              </DialogHeader>
-              <CallbackForm
-                productId={product.id}
-                onSuccess={() => setIsDialogOpen(false)}
-                productDetails={{
-                  name: productName,
-                  image: imageUrl,
-                  price: product.price.toString(),
-                }}
-              />
-            </DialogContent>
-          </Dialog>
+        <CardFooter className="pt-2 flex gap-2">
+          <Button
+            className="w-full"
+            onClick={() => onAddToCart?.(product)}
+          >
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            {t("add_to_cart")}
+          </Button>
+          {product.videoUrl && (
+            <Button
+              className="w-10 h-10 rounded-full bg-secondary text-secondary-foreground"
+              onClick={() => onPlayVideo?.(product.videoUrl)}
+            >
+              <Play className="h-4 w-4" />
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </article>

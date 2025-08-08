@@ -7,10 +7,13 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    fs: {
+      allow: ['api'], // Retain existing API directory access
+    },
   },
   plugins: [
     react({
-      jsxRuntime: "automatic", // ✅ this will now be valid
+      jsxRuntime: "automatic",
     }),
     mode === "development" && componentTagger(),
   ].filter(Boolean),
@@ -19,4 +22,12 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: 'index.html', // Ensure index.html as entry point
+    },
+  },
+  base: '/', // Set base URL for correct asset loading on Vercel
 }));
