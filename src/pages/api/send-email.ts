@@ -24,7 +24,7 @@ export default async function handler(
       secure: true,
       auth: {
         user: "videosoundevent@gmail.com",
-        pass: "auax ldqj nyts yeqw",
+        pass: "dhfx aemy evgh jeui",
       },
     });
 
