@@ -21,7 +21,7 @@ export default async function handler(
     }
 
     const smtpUser = process.env.SMTP_USER || "videosoundevent@gmail.com";
-    const smtpPass = process.env.SMTP_PASS || "auax ldqj nyts yeqw";
+    const smtpPass = process.env.SMTP_PASS || "dhfx aemy evgh jeui";
     const smtpTo = process.env.SMTP_TO || "videosoundevent@gmail.com";
 
     const transporter = nodemailer.createTransport({
